@@ -16,9 +16,11 @@
 #define tower1_offset_checksum      CHECKSUM("delta_tower1_offset")
 #define tower2_offset_checksum      CHECKSUM("delta_tower2_offset")
 #define tower3_offset_checksum      CHECKSUM("delta_tower3_offset")
+#define tower4_offset_checksum      CHECKSUM("delta_tower4_offset")
 #define tower1_angle_checksum       CHECKSUM("delta_tower1_angle")
 #define tower2_angle_checksum       CHECKSUM("delta_tower2_angle")
 #define tower3_angle_checksum       CHECKSUM("delta_tower3_angle")
+#define tower4_angle_checksum       CHECKSUM("delta_tower4_angle")
 
 #define SQ(x) powf(x, 2)
 #define ROUND(x, y) (roundf(x * (float)(1e ## y)) / (float)(1e ## y))
@@ -31,12 +33,14 @@ LinearDeltaSolution::LinearDeltaSolution(Config* config)
     // arm_radius is the horizontal distance from hinge to hinge when the effector is centered
     arm_radius = config->value(arm_radius_checksum)->by_default(124.0f)->as_number();
 
-    tower1_angle = config->value(tower1_angle_checksum)->by_default(0.0f)->as_number();
-    tower2_angle = config->value(tower2_angle_checksum)->by_default(0.0f)->as_number();
-    tower3_angle = config->value(tower3_angle_checksum)->by_default(0.0f)->as_number();
+    tower1_angle  = config->value(tower1_angle_checksum) ->by_default(0.0f)->as_number();
+    tower2_angle  = config->value(tower2_angle_checksum) ->by_default(0.0f)->as_number();
+    tower3_angle  = config->value(tower3_angle_checksum) ->by_default(0.0f)->as_number();
+	tower4_angle  = config->value(tower4_angle_checksum) ->by_default(0.0f)->as_number();
     tower1_offset = config->value(tower1_offset_checksum)->by_default(0.0f)->as_number();
     tower2_offset = config->value(tower2_offset_checksum)->by_default(0.0f)->as_number();
     tower3_offset = config->value(tower3_offset_checksum)->by_default(0.0f)->as_number();
+	tower4_offset = config->value(tower4_offset_checksum)->by_default(0.0f)->as_number();
 
     init();
 }
@@ -45,32 +49,38 @@ void LinearDeltaSolution::init()
 {
     arm_length_squared = SQ(arm_length);
 
-    // Effective X/Y positions of the three vertical towers.
+    // Effective X/Y positions of the four vertical towers.
     float delta_radius = arm_radius;
-
-    delta_tower1_x = (delta_radius + tower1_offset) * cosf((210.0F + tower1_angle) * PIOVER180); // front left tower
-    delta_tower1_y = (delta_radius + tower1_offset) * sinf((210.0F + tower1_angle) * PIOVER180);
-    delta_tower2_x = (delta_radius + tower2_offset) * cosf((330.0F + tower2_angle) * PIOVER180); // front right tower
-    delta_tower2_y = (delta_radius + tower2_offset) * sinf((330.0F + tower2_angle) * PIOVER180);
-    delta_tower3_x = (delta_radius + tower3_offset) * cosf((90.0F  + tower3_angle) * PIOVER180); // back middle tower
-    delta_tower3_y = (delta_radius + tower3_offset) * sinf((90.0F  + tower3_angle) * PIOVER180);
+                                                                                                  //                     2
+    delta_tower1_x = (delta_radius + tower1_offset) * cosf((0.0F    + tower1_angle) * PIOVER180); // +x tower          * * *
+    delta_tower1_y = (delta_radius + tower1_offset) * sinf((0.0F    + tower1_angle) * PIOVER180); //                 *       *
+    delta_tower2_x = (delta_radius + tower2_offset) * cosf((90.0F   + tower2_angle) * PIOVER180); // +y tower       *         *     Y
+    delta_tower2_y = (delta_radius + tower2_offset) * sinf((90.0F   + tower2_angle) * PIOVER180); //             3 *     O     * 1  ^
+    delta_tower3_x = (delta_radius + tower3_offset) * cosf((180.0F  + tower3_angle) * PIOVER180); // -x tower       *         *     | 
+    delta_tower3_y = (delta_radius + tower3_offset) * sinf((180.0F  + tower3_angle) * PIOVER180); //                 *       *      |
+	delta_tower4_x = (delta_radius + tower4_offset) * cosf((270.0F  + tower4_angle) * PIOVER180); // -y tower          * * *        |
+	delta_tower4_y = (delta_radius + tower4_offset) * sinf((270.0F  + tower4_angle) * PIOVER180); //               	     4          *------->X
 }
 
 void LinearDeltaSolution::cartesian_to_actuator(const float cartesian_mm[], ActuatorCoordinates &actuator_mm ) const
 {
 
-    actuator_mm[ALPHA_STEPPER] = sqrtf(this->arm_length_squared
+    actuator_mm[ALPHA_STEPPER  ] = sqrtf(this->arm_length_squared
                                        - SQ(delta_tower1_x - cartesian_mm[X_AXIS])
                                        - SQ(delta_tower1_y - cartesian_mm[Y_AXIS])
                                       ) + cartesian_mm[Z_AXIS];
-    actuator_mm[BETA_STEPPER ] = sqrtf(this->arm_length_squared
+    actuator_mm[BETA_STEPPER   ] = sqrtf(this->arm_length_squared
                                        - SQ(delta_tower2_x - cartesian_mm[X_AXIS])
                                        - SQ(delta_tower2_y - cartesian_mm[Y_AXIS])
                                       ) + cartesian_mm[Z_AXIS];
-    actuator_mm[GAMMA_STEPPER] = sqrtf(this->arm_length_squared
+    actuator_mm[GAMMA_STEPPER  ] = sqrtf(this->arm_length_squared
                                        - SQ(delta_tower3_x - cartesian_mm[X_AXIS])
                                        - SQ(delta_tower3_y - cartesian_mm[Y_AXIS])
                                       ) + cartesian_mm[Z_AXIS];
+	actuator_mm[EPSILON_STEPPER] = sqrtf(this->arm_length_squared
+									   - SQ(delta_tower4_x - cartesian_mm[X_AXIS])
+									   - SQ(delta_tower4_y - cartesian_mm[Y_AXIS])
+									  ) + cartesian_mm[Z_AXIS];
 }
 
 void LinearDeltaSolution::actuator_to_cartesian(const ActuatorCoordinates &actuator_mm, float cartesian_mm[] ) const
@@ -117,15 +127,16 @@ bool LinearDeltaSolution::set_optional(const arm_options_t& options)
 
     for(auto &i : options) {
         switch(i.first) {
-            case 'L': arm_length = i.second; break;
-            case 'R': arm_radius = i.second; break;
+            case 'L': arm_length    = i.second; break;
+            case 'R': arm_radius    = i.second; break;
             case 'A': tower1_offset = i.second; break;
             case 'B': tower2_offset = i.second; break;
             case 'C': tower3_offset = i.second; break;
-            case 'D': tower1_angle = i.second; break;
-            case 'E': tower2_angle = i.second; break;
-            case 'F': tower3_angle = i.second; break; // WARNING this will be deprecated
-            case 'H': tower3_angle = i.second; break;
+			case 'D': tower4_offset = i.second; break;
+			case 'E': tower1_angle  = i.second; break;
+            case 'F': tower2_angle  = i.second; break;
+            case 'G': tower3_angle  = i.second; break;
+            case 'H': tower4_angle  = i.second; break;
         }
     }
     init();
@@ -138,15 +149,17 @@ bool LinearDeltaSolution::get_optional(arm_options_t& options, bool force_all) c
     options['R'] = this->arm_radius;
 
     // don't report these if none of them are set
-    if(force_all || (this->tower1_offset != 0.0F || this->tower2_offset != 0.0F || this->tower3_offset != 0.0F ||
-                     this->tower1_angle != 0.0F  || this->tower2_angle != 0.0F  || this->tower3_angle != 0.0F) ) {
+    if(force_all || (this->tower1_offset != 0.0F || this->tower2_offset != 0.0F || this->tower3_offset != 0.0F || this->tower4_offset != 0.0F ||
+                     this->tower1_angle  != 0.0F || this->tower2_angle  != 0.0F || this->tower3_angle  != 0.0F || this->tower4_angle  != 0.0F) ) {
 
         options['A'] = this->tower1_offset;
         options['B'] = this->tower2_offset;
         options['C'] = this->tower3_offset;
-        options['D'] = this->tower1_angle;
-        options['E'] = this->tower2_angle;
-        options['H'] = this->tower3_angle;
+		options['D'] = this->tower4_offset;
+		options['E'] = this->tower1_angle;
+        options['F'] = this->tower2_angle;
+        options['G'] = this->tower3_angle;
+		options['H'] = this->tower3_angle;
     }
 
     return true;
