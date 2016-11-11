@@ -27,10 +27,14 @@ class LinearDeltaSolution : public BaseSolution {
         float delta_tower2_y;
         float delta_tower3_x;
         float delta_tower3_y;
+		float delta_tower4_x;
+        float delta_tower4_y;
         float tower1_offset;
         float tower2_offset;
         float tower3_offset;
-        float tower1_angle;
+        float tower4_offset;
+		float tower1_angle;
         float tower2_angle;
         float tower3_angle;
+		float tower4_angle;
 };
