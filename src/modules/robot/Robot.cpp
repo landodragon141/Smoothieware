@@ -85,6 +85,7 @@ using std::string;
 #define  alpha_checksum                      CHECKSUM("alpha")
 #define  beta_checksum                       CHECKSUM("beta")
 #define  gamma_checksum                      CHECKSUM("gamma")
+#define  epsilon_checksum                    CHECKSUM("epsilon")
 
 #define laser_module_default_power_checksum     CHECKSUM("laser_module_default_power")
 
@@ -194,11 +195,12 @@ void Robot::load_config()
     // default s value for laser
     this->s_value             = THEKERNEL->config->value(laser_module_default_power_checksum)->by_default(0.8F)->as_number();
 
-    // Make our Primary XYZ StepperMotors
+    // Make our Primary StepperMotors
     uint16_t const checksums[][6] = {
-        ACTUATOR_CHECKSUMS("alpha"), // X
-        ACTUATOR_CHECKSUMS("beta"),  // Y
-        ACTUATOR_CHECKSUMS("gamma"), // Z
+        ACTUATOR_CHECKSUMS("alpha"), 
+        ACTUATOR_CHECKSUMS("beta"),  
+        ACTUATOR_CHECKSUMS("gamma"),
+        ACUTATOR_CHECKSUMS("epsilon"),
     };
 
     // default acceleration setting, can be overriden with newer per axis settings
