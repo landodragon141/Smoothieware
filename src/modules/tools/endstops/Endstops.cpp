@@ -32,83 +32,99 @@
 
 #include <ctype.h>
 
-#define ALPHA_AXIS 0
-#define BETA_AXIS  1
-#define GAMMA_AXIS 2
+#define ALPHA_AXIS   0
+#define BETA_AXIS    1
+#define GAMMA_AXIS   2
+#define EPSILON_AXIS 3 //Is this necessary?
 #define X_AXIS 0
 #define Y_AXIS 1
 #define Z_AXIS 2
+#define W_AXIS 3 //Is this necessary?
 
-#define endstops_module_enable_checksum         CHECKSUM("endstops_enable")
-#define corexy_homing_checksum                  CHECKSUM("corexy_homing")
-#define delta_homing_checksum                   CHECKSUM("delta_homing")
-#define rdelta_homing_checksum                  CHECKSUM("rdelta_homing")
-#define scara_homing_checksum                   CHECKSUM("scara_homing")
+#define endstops_module_enable_checksum       CHECKSUM("endstops_enable")
+#define corexy_homing_checksum                CHECKSUM("corexy_homing")
+#define delta_homing_checksum                 CHECKSUM("delta_homing")
+#define rdelta_homing_checksum                CHECKSUM("rdelta_homing")
+#define scara_homing_checksum                 CHECKSUM("scara_homing")
 
-#define alpha_min_endstop_checksum       CHECKSUM("alpha_min_endstop")
-#define beta_min_endstop_checksum        CHECKSUM("beta_min_endstop")
-#define gamma_min_endstop_checksum       CHECKSUM("gamma_min_endstop")
+#define alpha_min_endstop_checksum            CHECKSUM("alpha_min_endstop")
+#define beta_min_endstop_checksum             CHECKSUM("beta_min_endstop")
+#define gamma_min_endstop_checksum            CHECKSUM("gamma_min_endstop")
+#define epsilon_min_endstop_checksum          CHECKSUM("epsilon_min_endstop")
 
-#define alpha_max_endstop_checksum       CHECKSUM("alpha_max_endstop")
-#define beta_max_endstop_checksum        CHECKSUM("beta_max_endstop")
-#define gamma_max_endstop_checksum       CHECKSUM("gamma_max_endstop")
+#define alpha_max_endstop_checksum            CHECKSUM("alpha_max_endstop")
+#define beta_max_endstop_checksum             CHECKSUM("beta_max_endstop")
+#define gamma_max_endstop_checksum            CHECKSUM("gamma_max_endstop")
+#define epsilon_max_endstop_checksum          CHECKSUM("epsilon_max_endstop")
 
-#define alpha_trim_checksum              CHECKSUM("alpha_trim")
-#define beta_trim_checksum               CHECKSUM("beta_trim")
-#define gamma_trim_checksum              CHECKSUM("gamma_trim")
+#define alpha_trim_checksum                   CHECKSUM("alpha_trim")
+#define beta_trim_checksum                    CHECKSUM("beta_trim")
+#define gamma_trim_checksum                   CHECKSUM("gamma_trim")
+#define epsilon_trim_checksum                 CHECKSUM("epsilon_trim")
 
-#define alpha_max_travel_checksum       CHECKSUM("alpha_max_travel")
-#define beta_max_travel_checksum        CHECKSUM("beta_max_travel")
-#define gamma_max_travel_checksum       CHECKSUM("gamma_max_travel")
+#define alpha_max_travel_checksum             CHECKSUM("alpha_max_travel")
+#define beta_max_travel_checksum              CHECKSUM("beta_max_travel")
+#define gamma_max_travel_checksum             CHECKSUM("gamma_max_travel")
+#define epsilon_max_travel_checksum           CHECKSUM("epsilon_max_travel")
 
 // these values are in steps and should be deprecated
-#define alpha_fast_homing_rate_checksum  CHECKSUM("alpha_fast_homing_rate")
-#define beta_fast_homing_rate_checksum   CHECKSUM("beta_fast_homing_rate")
-#define gamma_fast_homing_rate_checksum  CHECKSUM("gamma_fast_homing_rate")
+#define alpha_fast_homing_rate_checksum       CHECKSUM("alpha_fast_homing_rate")
+#define beta_fast_homing_rate_checksum        CHECKSUM("beta_fast_homing_rate")
+#define gamma_fast_homing_rate_checksum       CHECKSUM("gamma_fast_homing_rate")
+#define epsilon_fast_homing_rate_checksum     CHECKSUM("epsilon_fast_homing_rate")
 
-#define alpha_slow_homing_rate_checksum  CHECKSUM("alpha_slow_homing_rate")
-#define beta_slow_homing_rate_checksum   CHECKSUM("beta_slow_homing_rate")
-#define gamma_slow_homing_rate_checksum  CHECKSUM("gamma_slow_homing_rate")
+#define alpha_slow_homing_rate_checksum       CHECKSUM("alpha_slow_homing_rate")
+#define beta_slow_homing_rate_checksum        CHECKSUM("beta_slow_homing_rate")
+#define gamma_slow_homing_rate_checksum       CHECKSUM("gamma_slow_homing_rate")
+#define epsilon_slow_homing_rate_checksum     CHECKSUM("epsilon_slow_homing_rate")
 
-#define alpha_homing_retract_checksum    CHECKSUM("alpha_homing_retract")
-#define beta_homing_retract_checksum     CHECKSUM("beta_homing_retract")
-#define gamma_homing_retract_checksum    CHECKSUM("gamma_homing_retract")
+#define alpha_homing_retract_checksum         CHECKSUM("alpha_homing_retract")
+#define beta_homing_retract_checksum          CHECKSUM("beta_homing_retract")
+#define gamma_homing_retract_checksum         CHECKSUM("gamma_homing_retract")
+#define epsilon_homing_retract_checksum       CHECKSUM("epsilon_homing_retract")
 
 // same as above but in user friendly mm/s and mm
-#define alpha_fast_homing_rate_mm_checksum  CHECKSUM("alpha_fast_homing_rate_mm_s")
-#define beta_fast_homing_rate_mm_checksum   CHECKSUM("beta_fast_homing_rate_mm_s")
-#define gamma_fast_homing_rate_mm_checksum  CHECKSUM("gamma_fast_homing_rate_mm_s")
+#define alpha_fast_homing_rate_mm_checksum    CHECKSUM("alpha_fast_homing_rate_mm_s")
+#define beta_fast_homing_rate_mm_checksum     CHECKSUM("beta_fast_homing_rate_mm_s")
+#define gamma_fast_homing_rate_mm_checksum    CHECKSUM("gamma_fast_homing_rate_mm_s")
+#define epsilon_fast_homing_rate_mm_checksum  CHECKSUM("epsilon_fast_homing_rate_mm_s")
 
-#define alpha_slow_homing_rate_mm_checksum  CHECKSUM("alpha_slow_homing_rate_mm_s")
-#define beta_slow_homing_rate_mm_checksum   CHECKSUM("beta_slow_homing_rate_mm_s")
-#define gamma_slow_homing_rate_mm_checksum  CHECKSUM("gamma_slow_homing_rate_mm_s")
+#define alpha_slow_homing_rate_mm_checksum    CHECKSUM("alpha_slow_homing_rate_mm_s")
+#define beta_slow_homing_rate_mm_checksum     CHECKSUM("beta_slow_homing_rate_mm_s")
+#define gamma_slow_homing_rate_mm_checksum    CHECKSUM("gamma_slow_homing_rate_mm_s")
+#define epsilon_slow_homing_rate_mm_checksum  CHECKSUM("epsilon_slow_homing_rate_mm_s")
 
-#define alpha_homing_retract_mm_checksum    CHECKSUM("alpha_homing_retract_mm")
-#define beta_homing_retract_mm_checksum     CHECKSUM("beta_homing_retract_mm")
-#define gamma_homing_retract_mm_checksum    CHECKSUM("gamma_homing_retract_mm")
+#define alpha_homing_retract_mm_checksum      CHECKSUM("alpha_homing_retract_mm")
+#define beta_homing_retract_mm_checksum       CHECKSUM("beta_homing_retract_mm")
+#define gamma_homing_retract_mm_checksum      CHECKSUM("gamma_homing_retract_mm")
+#define epsilon_homing_retract_mm_checksum    CHECKSUM("epsilon_homing_retract_mm")
 
-#define endstop_debounce_count_checksum  CHECKSUM("endstop_debounce_count")
-#define endstop_debounce_ms_checksum     CHECKSUM("endstop_debounce_ms")
+#define endstop_debounce_count_checksum       CHECKSUM("endstop_debounce_count")
+#define endstop_debounce_ms_checksum          CHECKSUM("endstop_debounce_ms")
 
-#define alpha_homing_direction_checksum  CHECKSUM("alpha_homing_direction")
-#define beta_homing_direction_checksum   CHECKSUM("beta_homing_direction")
-#define gamma_homing_direction_checksum  CHECKSUM("gamma_homing_direction")
+#define alpha_homing_direction_checksum       CHECKSUM("alpha_homing_direction")
+#define beta_homing_direction_checksum        CHECKSUM("beta_homing_direction")
+#define gamma_homing_direction_checksum       CHECKSUM("gamma_homing_direction")
+#define epsilon_homing_direction_checksum     CHECKSUM("epsilon_homing_direction")
 
-#define alpha_min_checksum               CHECKSUM("alpha_min")
-#define beta_min_checksum                CHECKSUM("beta_min")
-#define gamma_min_checksum               CHECKSUM("gamma_min")
+#define alpha_min_checksum                    CHECKSUM("alpha_min")
+#define beta_min_checksum                     CHECKSUM("beta_min")
+#define gamma_min_checksum                    CHECKSUM("gamma_min")
+#define epsilon_min_checksum                  CHECKSUM("epsilon_min")
 
-#define alpha_max_checksum               CHECKSUM("alpha_max")
-#define beta_max_checksum                CHECKSUM("beta_max")
-#define gamma_max_checksum               CHECKSUM("gamma_max")
+#define alpha_max_checksum                    CHECKSUM("alpha_max")
+#define beta_max_checksum                     CHECKSUM("beta_max")
+#define gamma_max_checksum                    CHECKSUM("gamma_max")
+#define epsilon_max_checksum                  CHECKSUM("epsilon_max")
 
-#define alpha_limit_enable_checksum      CHECKSUM("alpha_limit_enable")
-#define beta_limit_enable_checksum       CHECKSUM("beta_limit_enable")
-#define gamma_limit_enable_checksum      CHECKSUM("gamma_limit_enable")
+#define alpha_limit_enable_checksum           CHECKSUM("alpha_limit_enable")
+#define beta_limit_enable_checksum            CHECKSUM("beta_limit_enable")
+#define gamma_limit_enable_checksum           CHECKSUM("gamma_limit_enable")
+#define epsilon_limit_enable_checksum         CHECKSUM("epsilon_limit_enable")
 
-#define home_z_first_checksum            CHECKSUM("home_z_first")
-#define homing_order_checksum            CHECKSUM("homing_order")
-#define move_to_origin_checksum          CHECKSUM("move_to_origin_after_home")
+#define home_z_first_checksum                 CHECKSUM("home_z_first")
+#define homing_order_checksum                 CHECKSUM("homing_order")
+#define move_to_origin_checksum               CHECKSUM("move_to_origin_after_home")
 
 #define STEPPER THEROBOT->actuators
 #define STEPS_PER_MM(a) (STEPPER[a]->get_steps_per_mm())
@@ -153,65 +169,77 @@ void Endstops::on_module_loaded()
 // Get config
 void Endstops::load_config()
 {
-    this->pins[0].from_string( THEKERNEL->config->value(alpha_min_endstop_checksum          )->by_default("nc" )->as_string())->as_input();
-    this->pins[1].from_string( THEKERNEL->config->value(beta_min_endstop_checksum           )->by_default("nc" )->as_string())->as_input();
-    this->pins[2].from_string( THEKERNEL->config->value(gamma_min_endstop_checksum          )->by_default("nc" )->as_string())->as_input();
-    this->pins[3].from_string( THEKERNEL->config->value(alpha_max_endstop_checksum          )->by_default("nc" )->as_string())->as_input();
-    this->pins[4].from_string( THEKERNEL->config->value(beta_max_endstop_checksum           )->by_default("nc" )->as_string())->as_input();
-    this->pins[5].from_string( THEKERNEL->config->value(gamma_max_endstop_checksum          )->by_default("nc" )->as_string())->as_input();
+    this->pins[0].from_string( THEKERNEL->config->value(alpha_min_endstop_checksum      )->by_default("nc" )->as_string())->as_input();
+    this->pins[1].from_string( THEKERNEL->config->value(beta_min_endstop_checksum       )->by_default("nc" )->as_string())->as_input();
+    this->pins[2].from_string( THEKERNEL->config->value(gamma_min_endstop_checksum      )->by_default("nc" )->as_string())->as_input();
+    this->pins[3].from_string( THEKERNEL->config->value(epsilon_min_endstop_checksum    )->by_default("nc" )->as_string())->as_input();
+    this->pins[4].from_string( THEKERNEL->config->value(alpha_max_endstop_checksum      )->by_default("nc" )->as_string())->as_input();
+    this->pins[5].from_string( THEKERNEL->config->value(beta_max_endstop_checksum       )->by_default("nc" )->as_string())->as_input();
+    this->pins[6].from_string( THEKERNEL->config->value(gamma_max_endstop_checksum      )->by_default("nc" )->as_string())->as_input();
+    this->pins[7].from_string( THEKERNEL->config->value(epsilon_max_endstop_checksum    )->by_default("nc" )->as_string())->as_input();  
 
     // These are the old ones in steps still here for backwards compatibility
     this->fast_rates[0] =  THEKERNEL->config->value(alpha_fast_homing_rate_checksum     )->by_default(4000 )->as_number() / STEPS_PER_MM(0);
     this->fast_rates[1] =  THEKERNEL->config->value(beta_fast_homing_rate_checksum      )->by_default(4000 )->as_number() / STEPS_PER_MM(1);
     this->fast_rates[2] =  THEKERNEL->config->value(gamma_fast_homing_rate_checksum     )->by_default(6400 )->as_number() / STEPS_PER_MM(2);
+    this->fast_rates[3] =  THEKERNEL->config->value(epsilon_fast_homing_rate_checksum   )->by_default(6400 )->as_number() / STEPS_PER_MM(3);  
     this->slow_rates[0] =  THEKERNEL->config->value(alpha_slow_homing_rate_checksum     )->by_default(2000 )->as_number() / STEPS_PER_MM(0);
     this->slow_rates[1] =  THEKERNEL->config->value(beta_slow_homing_rate_checksum      )->by_default(2000 )->as_number() / STEPS_PER_MM(1);
     this->slow_rates[2] =  THEKERNEL->config->value(gamma_slow_homing_rate_checksum     )->by_default(3200 )->as_number() / STEPS_PER_MM(2);
+    this->slow_rates[3] =  THEKERNEL->config->value(epsilon_slow_homing_rate_checksum   )->by_default(3200 )->as_number() / STEPS_PER_MM(3);
     this->retract_mm[0] =  THEKERNEL->config->value(alpha_homing_retract_checksum       )->by_default(400  )->as_number() / STEPS_PER_MM(0);
     this->retract_mm[1] =  THEKERNEL->config->value(beta_homing_retract_checksum        )->by_default(400  )->as_number() / STEPS_PER_MM(1);
     this->retract_mm[2] =  THEKERNEL->config->value(gamma_homing_retract_checksum       )->by_default(1600 )->as_number() / STEPS_PER_MM(2);
-
+    this->retract_mm[3] =  THEKERNEL->config->value(epsilon_homing_retract_checksum     )->by_default(1600 )->as_number() / STEPS_PER_MM(3);
+      
     // newer mm based config values override the old ones, convert to steps/mm and steps, defaults to what was set in the older config settings above
-    this->fast_rates[0] = THEKERNEL->config->value(alpha_fast_homing_rate_mm_checksum )->by_default(this->fast_rates[0])->as_number();
-    this->fast_rates[1] = THEKERNEL->config->value(beta_fast_homing_rate_mm_checksum  )->by_default(this->fast_rates[1])->as_number();
-    this->fast_rates[2] = THEKERNEL->config->value(gamma_fast_homing_rate_mm_checksum )->by_default(this->fast_rates[2])->as_number();
-    this->slow_rates[0] = THEKERNEL->config->value(alpha_slow_homing_rate_mm_checksum )->by_default(this->slow_rates[0])->as_number();
-    this->slow_rates[1] = THEKERNEL->config->value(beta_slow_homing_rate_mm_checksum  )->by_default(this->slow_rates[1])->as_number();
-    this->slow_rates[2] = THEKERNEL->config->value(gamma_slow_homing_rate_mm_checksum )->by_default(this->slow_rates[2])->as_number();
-    this->retract_mm[0] = THEKERNEL->config->value(alpha_homing_retract_mm_checksum   )->by_default(this->retract_mm[0])->as_number();
-    this->retract_mm[1] = THEKERNEL->config->value(beta_homing_retract_mm_checksum    )->by_default(this->retract_mm[1])->as_number();
-    this->retract_mm[2] = THEKERNEL->config->value(gamma_homing_retract_mm_checksum   )->by_default(this->retract_mm[2])->as_number();
-
+    this->fast_rates[0] = THEKERNEL->config->value(alpha_fast_homing_rate_mm_checksum   )->by_default(this->fast_rates[0])->as_number();
+    this->fast_rates[1] = THEKERNEL->config->value(beta_fast_homing_rate_mm_checksum    )->by_default(this->fast_rates[1])->as_number();
+    this->fast_rates[2] = THEKERNEL->config->value(gamma_fast_homing_rate_mm_checksum   )->by_default(this->fast_rates[2])->as_number();
+    this->fast_rates[2] = THEKERNEL->config->value(epsilon_fast_homing_rate_mm_checksum )->by_default(this->fast_rates[3])->as_number();  
+    this->slow_rates[0] = THEKERNEL->config->value(alpha_slow_homing_rate_mm_checksum   )->by_default(this->slow_rates[0])->as_number();
+    this->slow_rates[1] = THEKERNEL->config->value(beta_slow_homing_rate_mm_checksum    )->by_default(this->slow_rates[1])->as_number();
+    this->slow_rates[2] = THEKERNEL->config->value(gamma_slow_homing_rate_mm_checksum   )->by_default(this->slow_rates[2])->as_number();
+    this->slow_rates[3] = THEKERNEL->config->value(epsilon_slow_homing_rate_mm_checksum )->by_default(this->slow_rates[3])->as_number();
+    this->retract_mm[0] = THEKERNEL->config->value(alpha_homing_retract_mm_checksum     )->by_default(this->retract_mm[0])->as_number();
+    this->retract_mm[1] = THEKERNEL->config->value(beta_homing_retract_mm_checksum      )->by_default(this->retract_mm[1])->as_number();
+    this->retract_mm[2] = THEKERNEL->config->value(gamma_homing_retract_mm_checksum     )->by_default(this->retract_mm[2])->as_number();
+    this->retract_mm[3] = THEKERNEL->config->value(epsilon_homing_retract_mm_checksum   )->by_default(this->retract_mm[3])->as_number();
+    
     // NOTE the debouce count is in milliseconds so probably does not need to beset anymore
-    this->debounce_ms= THEKERNEL->config->value(endstop_debounce_ms_checksum       )->by_default(0)->as_number();
-    this->debounce_count= THEKERNEL->config->value(endstop_debounce_count_checksum    )->by_default(100)->as_number();
+    this->debounce_ms= THEKERNEL->config->value(endstop_debounce_ms_checksum            )->by_default(0)->as_number();
+    this->debounce_count= THEKERNEL->config->value(endstop_debounce_count_checksum      )->by_default(100)->as_number();
 
     // get homing direction and convert to boolean where true is home to min, and false is home to max
-    this->home_direction[0]= THEKERNEL->config->value(alpha_homing_direction_checksum)->by_default("home_to_min")->as_string() != "home_to_max";
-    this->home_direction[1]= THEKERNEL->config->value(beta_homing_direction_checksum)->by_default("home_to_min")->as_string()  != "home_to_max";
-    this->home_direction[2]= THEKERNEL->config->value(gamma_homing_direction_checksum)->by_default("home_to_min")->as_string() != "home_to_max";
+    this->home_direction[0]= THEKERNEL->config->value(alpha_homing_direction_checksum)  ->by_default("home_to_min")->as_string() != "home_to_max";
+    this->home_direction[1]= THEKERNEL->config->value(beta_homing_direction_checksum)   ->by_default("home_to_min")->as_string() != "home_to_max";
+    this->home_direction[2]= THEKERNEL->config->value(gamma_homing_direction_checksum)  ->by_default("home_to_min")->as_string() != "home_to_max";
+    this->home_direction[3]= THEKERNEL->config->value(epsilon_homing_direction_checksum)->by_default("home_to_min")->as_string() != "home_to_max";  
 
-    this->homing_position[0]=  this->home_direction[0] ? THEKERNEL->config->value(alpha_min_checksum)->by_default(0)->as_number() : THEKERNEL->config->value(alpha_max_checksum)->by_default(200)->as_number();
-    this->homing_position[1]=  this->home_direction[1] ? THEKERNEL->config->value(beta_min_checksum )->by_default(0)->as_number() : THEKERNEL->config->value(beta_max_checksum )->by_default(200)->as_number();
-    this->homing_position[2]=  this->home_direction[2] ? THEKERNEL->config->value(gamma_min_checksum)->by_default(0)->as_number() : THEKERNEL->config->value(gamma_max_checksum)->by_default(200)->as_number();
+    this->homing_position[0]=  this->home_direction[0] ? THEKERNEL->config->value(alpha_min_checksum)  ->by_default(0)->as_number() : THEKERNEL->config->value(alpha_max_checksum)->by_default(200)->as_number();
+    this->homing_position[1]=  this->home_direction[1] ? THEKERNEL->config->value(beta_min_checksum )  ->by_default(0)->as_number() : THEKERNEL->config->value(beta_max_checksum )->by_default(200)->as_number();
+    this->homing_position[2]=  this->home_direction[2] ? THEKERNEL->config->value(gamma_min_checksum)  ->by_default(0)->as_number() : THEKERNEL->config->value(gamma_max_checksum)->by_default(200)->as_number();
+    this->homing_position[3]=  this->home_direction[3] ? THEKERNEL->config->value(epsilon_min_checksum)->by_default(0)->as_number() : THEKERNEL->config->value(gamma_max_checksum)->by_default(200)->as_number();  
 
     // used to set maximum movement on homing, set by alpha_max_travel if defined
     // for backward compatibility uses alpha_max if not defined.
     // TO BE deprecated
-    this->alpha_max= THEKERNEL->config->value(alpha_max_checksum)->by_default(500)->as_number();
-    this->beta_max= THEKERNEL->config->value(beta_max_checksum)->by_default(500)->as_number();
-    this->gamma_max= THEKERNEL->config->value(gamma_max_checksum)->by_default(500)->as_number();
+    this->alpha_max   = THEKERNEL->config->value(alpha_max_checksum)  ->by_default(500)->as_number();
+    this->beta_max    = THEKERNEL->config->value(beta_max_checksum)   ->by_default(500)->as_number();
+    this->gamma_max   = THEKERNEL->config->value(gamma_max_checksum)  ->by_default(500)->as_number();
+    this->epsilon_max = THEKERNEL->config->value(epsilon_max_checksum)->by_default(500)->as_number();  
 
-    this->alpha_max= THEKERNEL->config->value(alpha_max_travel_checksum)->by_default(alpha_max*2)->as_number();
-    this->beta_max= THEKERNEL->config->value(beta_max_travel_checksum)->by_default(beta_max*2)->as_number();
-    this->gamma_max= THEKERNEL->config->value(gamma_max_travel_checksum)->by_default(gamma_max*2)->as_number();
+    this->alpha_max   = THEKERNEL->config->value(alpha_max_travel_checksum)  ->by_default(alpha_max*2)  ->as_number();
+    this->beta_max    = THEKERNEL->config->value(beta_max_travel_checksum)   ->by_default(beta_max*2)   ->as_number();
+    this->gamma_max   = THEKERNEL->config->value(gamma_max_travel_checksum)  ->by_default(gamma_max*2)  ->as_number();
+    this->epsilon_max = THEKERNEL->config->value(epsilon_max_travel_checksum)->by_default(epsilon_max*2)->as_number();  
 
-    this->is_corexy                 =  THEKERNEL->config->value(corexy_homing_checksum)->by_default(false)->as_bool();
-    this->is_delta                  =  THEKERNEL->config->value(delta_homing_checksum)->by_default(false)->as_bool();
-    this->is_rdelta                 =  THEKERNEL->config->value(rdelta_homing_checksum)->by_default(false)->as_bool();
-    this->is_scara                  =  THEKERNEL->config->value(scara_homing_checksum)->by_default(false)->as_bool();
+    this->is_corexy   =  THEKERNEL->config->value(corexy_homing_checksum)->by_default(false)->as_bool();
+    this->is_delta    =  THEKERNEL->config->value(delta_homing_checksum) ->by_default(false)->as_bool();
+    this->is_rdelta   =  THEKERNEL->config->value(rdelta_homing_checksum)->by_default(false)->as_bool();
+    this->is_scara    =  THEKERNEL->config->value(scara_homing_checksum) ->by_default(false)->as_bool();
 
-    this->home_z_first              = THEKERNEL->config->value(home_z_first_checksum)->by_default(false)->as_bool();
+    this->home_z_first = THEKERNEL->config->value(home_z_first_checksum)->by_default(false)->as_bool();
 
     // see if an order has been specified, must be three characters, XYZ or YXZ etc
     string order = THEKERNEL->config->value(homing_order_checksum)->by_default("")->as_string();
@@ -231,35 +259,38 @@ void Endstops::load_config()
 
     // endstop trim used by deltas to do soft adjusting
     // on a delta homing to max, a negative trim value will move the carriage down, and a positive will move it up
-    this->trim_mm[0] = THEKERNEL->config->value(alpha_trim_checksum )->by_default(0  )->as_number();
-    this->trim_mm[1] = THEKERNEL->config->value(beta_trim_checksum  )->by_default(0  )->as_number();
-    this->trim_mm[2] = THEKERNEL->config->value(gamma_trim_checksum )->by_default(0  )->as_number();
+    this->trim_mm[0] = THEKERNEL->config->value(alpha_trim_checksum )  ->by_default(0  )->as_number();
+    this->trim_mm[1] = THEKERNEL->config->value(beta_trim_checksum  )  ->by_default(0  )->as_number();
+    this->trim_mm[2] = THEKERNEL->config->value(gamma_trim_checksum )  ->by_default(0  )->as_number();
+    this->trim_mm[3] = THEKERNEL->config->value(epsilon_trim_checksum )->by_default(0  )->as_number();  
 
     // limits enabled
-    this->limit_enable[X_AXIS] = THEKERNEL->config->value(alpha_limit_enable_checksum)->by_default(false)->as_bool();
-    this->limit_enable[Y_AXIS] = THEKERNEL->config->value(beta_limit_enable_checksum)->by_default(false)->as_bool();
-    this->limit_enable[Z_AXIS] = THEKERNEL->config->value(gamma_limit_enable_checksum)->by_default(false)->as_bool();
+    this->limit_enable[X_AXIS] = THEKERNEL->config->value(alpha_limit_enable_checksum)  ->by_default(false)->as_bool();
+    this->limit_enable[Y_AXIS] = THEKERNEL->config->value(beta_limit_enable_checksum)   ->by_default(false)->as_bool();
+    this->limit_enable[Z_AXIS] = THEKERNEL->config->value(gamma_limit_enable_checksum)  ->by_default(false)->as_bool();
+    this->limit_enable[W_AXIS] = THEKERNEL->config->value(epsilon_limit_enable_checksum)->by_default(false)->as_bool();
 
     // set to true by default for deltas due to trim, false on cartesians
     this->move_to_origin_after_home = THEKERNEL->config->value(move_to_origin_checksum)->by_default(is_delta)->as_bool();
 
-    if(this->limit_enable[X_AXIS] || this->limit_enable[Y_AXIS] || this->limit_enable[Z_AXIS]) {
+    if(this->limit_enable[X_AXIS] || this->limit_enable[Y_AXIS] || this->limit_enable[Z_AXIS] || this->limit_enable[W_AXIS]) {
         register_for_event(ON_IDLE);
         if(this->is_delta || this->is_rdelta) {
             // we must enable all the limits not just one
             this->limit_enable[X_AXIS] = true;
             this->limit_enable[Y_AXIS] = true;
             this->limit_enable[Z_AXIS] = true;
+            this->limit_enable[W_AXIS] = true;  
         }
     }
 
     //
     if(this->is_delta || this->is_rdelta) {
         // some things must be the same or they will die, so force it here to avoid config errors
-        this->fast_rates[1] = this->fast_rates[2] = this->fast_rates[0];
-        this->slow_rates[1] = this->slow_rates[2] = this->slow_rates[0];
-        this->retract_mm[1] = this->retract_mm[2] = this->retract_mm[0];
-        this->home_direction[1] = this->home_direction[2] = this->home_direction[0];
+        this->fast_rates[1]     = this->fast_rates[2]     = this->fast_rates[0]     = this->fast_rates[3];
+        this->slow_rates[1]     = this->slow_rates[2]     = this->slow_rates[0]     = this->slow_rates[3];
+        this->retract_mm[1]     = this->retract_mm[2]     = this->retract_mm[0]     = this->retract_mm[3];
+        this->home_direction[1] = this->home_direction[2] = this->home_direction[0] = this->home_direction[3];
         // NOTE homing_position for rdelta is the angle of the actuator not the cartesian position
         if(!this->is_rdelta) this->homing_position[0] = this->homing_position[1] = 0;
     }
@@ -277,7 +308,7 @@ bool Endstops::debounced_get(int pin)
     return false;
 }
 
-static const char *endstop_names[] = {"min_x", "min_y", "min_z", "max_x", "max_y", "max_z"};
+static const char *endstop_names[] = {"min_x", "min_y", "min_z", "min_w", "max_x", "max_y", "max_z", "max_w"};
 
 void Endstops::on_idle(void *argument)
 {
@@ -435,6 +466,7 @@ uint32_t Endstops::read_endstops(uint32_t dummy)
                         STEPPER[X_AXIS]->stop_moving();
                         STEPPER[Y_AXIS]->stop_moving();
                         STEPPER[Z_AXIS]->stop_moving();
+                        STEPPER[W_AXIS]->stop_moving();  
                     }
 
                 } else {
@@ -590,6 +622,7 @@ void Endstops::process_home_command(Gcode* gcode)
             if(gcode->has_letter('X')) THEROBOT->reset_axis_position(gcode->get_value('X'), X_AXIS);
             if(gcode->has_letter('Y')) THEROBOT->reset_axis_position(gcode->get_value('Y'), Y_AXIS);
             if(gcode->has_letter('Z')) THEROBOT->reset_axis_position(gcode->get_value('Z'), Z_AXIS);
+            if(gcode->has_letter('W')) THEROBOT->reset_axis_position(gcode->get_value('W'), W_AXIS);  
         }
         return;
 
@@ -599,6 +632,7 @@ void Endstops::process_home_command(Gcode* gcode)
         if(gcode->has_letter('X')) ac[0] =  gcode->get_value('X');
         if(gcode->has_letter('Y')) ac[1] =  gcode->get_value('Y');
         if(gcode->has_letter('Z')) ac[2] =  gcode->get_value('Z');
+        if(gcode->has_letter('W')) ac[3] =  gcode->get_value('W');  
         THEROBOT->reset_actuator_position(ac);
         return;
 
@@ -620,7 +654,7 @@ void Endstops::process_home_command(Gcode* gcode)
     haxis.reset();
 
     if(!home_in_z) { // ie not a delta
-        bool axis_speced = ( gcode->has_letter('X') || gcode->has_letter('Y') || gcode->has_letter('Z') );
+        bool axis_speced = ( gcode->has_letter('X') || gcode->has_letter('Y') || gcode->has_letter('Z') || gcode->has_letter('W') );
         // only enable homing if the endstop is defined,
         for ( int c = X_AXIS; c <= Z_AXIS; c++ ) {
             if (this->pins[c + (this->home_direction[c] ? 0 : 3)].connected() && (!axis_speced || gcode->has_letter(c + 'X')) ) {
@@ -683,7 +717,8 @@ void Endstops::process_home_command(Gcode* gcode)
         float ideal_position[3] = {
             this->homing_position[X_AXIS] + this->home_offset[X_AXIS],
             this->homing_position[Y_AXIS] + this->home_offset[Y_AXIS],
-            this->homing_position[Z_AXIS] + this->home_offset[Z_AXIS]
+            this->homing_position[Z_AXIS] + this->home_offset[Z_AXIS],
+            this->homing_position[W_AXIS] + this->home_offset[W_AXIS]  
         };
 
         bool has_endstop_trim = this->is_delta;
@@ -695,24 +730,25 @@ void Endstops::process_home_command(Gcode* gcode)
             ActuatorCoordinates real_actuator_position = {
                 ideal_actuator_position[X_AXIS] - this->trim_mm[X_AXIS],
                 ideal_actuator_position[Y_AXIS] - this->trim_mm[Y_AXIS],
-                ideal_actuator_position[Z_AXIS] - this->trim_mm[Z_AXIS]
+                ideal_actuator_position[Z_AXIS] - this->trim_mm[Z_AXIS],
+                ideal_actuator_position[W_AXIS] - this->trim_mm[W_AXIS]  
             };
 
             float real_position[3];
             THEROBOT->arm_solution->actuator_to_cartesian(real_actuator_position, real_position);
             // Reset the actuator positions to correspond our real position
-            THEROBOT->reset_axis_position(real_position[0], real_position[1], real_position[2]);
+            THEROBOT->reset_axis_position(real_position[0], real_position[1], real_position[2], real_position[3]);
 
         } else {
             // without endstop trim, real_position == ideal_position
             if(is_rdelta) {
                 // with a rotary delta we set the actuators angle then use the FK to calculate the resulting cartesian coordinates
-                ActuatorCoordinates real_actuator_position = {ideal_position[0], ideal_position[1], ideal_position[2]};
+                ActuatorCoordinates real_actuator_position = {ideal_position[0], ideal_position[1], ideal_position[2], ideal_position[3]};
                 THEROBOT->reset_actuator_position(real_actuator_position);
 
             } else {
                 // Reset the actuator positions to correspond our real position
-                THEROBOT->reset_axis_position(ideal_position[0], ideal_position[1], ideal_position[2]);
+                THEROBOT->reset_axis_position(ideal_position[0], ideal_position[1], ideal_position[2], ideal_position[3]);
             }
         }
 
@@ -758,8 +794,12 @@ void Endstops::set_homing_offset(Gcode *gcode)
         home_offset[2] -= (cartesian[Z_AXIS] - gcode->get_value('Z'));
         THEROBOT->reset_axis_position(gcode->get_value('Z'), Z_AXIS);
     }
+    if (gcode->has_letter('W')) {
+        home_offset[3] -= (cartesian[W_AXIS] - gcode->get_value('W'));
+        THEROBOT->reset_axis_position(gcode->get_value('W'), W_AXIS);
+    }  
 
-    gcode->stream->printf("Homing Offset: X %5.3f Y %5.3f Z %5.3f\n", home_offset[0], home_offset[1], home_offset[2]);
+    gcode->stream->printf("Homing Offset: X %5.3f Y %5.3f Z %5.3f W %5.3f\n", home_offset[0], home_offset[1], home_offset[2], home_offset[3]);
 }
 
 // Start homing sequences by response to GCode commands
@@ -788,7 +828,8 @@ void Endstops::on_gcode_received(void *argument)
                 if (gcode->has_letter('X')) home_offset[0] = gcode->get_value('X');
                 if (gcode->has_letter('Y')) home_offset[1] = gcode->get_value('Y');
                 if (gcode->has_letter('Z')) home_offset[2] = gcode->get_value('Z');
-                gcode->stream->printf("X %5.3f Y %5.3f Z %5.3f\n", home_offset[0], home_offset[1], home_offset[2]);
+                if (gcode->has_letter('W')) home_offset[3] = gcode->get_value('W');    
+                gcode->stream->printf("X %5.3f Y %5.3f Z %5.3f W %5.3\n", home_offset[0], home_offset[1], home_offset[2], home_offset[3]);
                 break;
 
             case 306: // set homing offset based on current position
@@ -800,12 +841,12 @@ void Endstops::on_gcode_received(void *argument)
             case 500: // save settings
             case 503: // print settings
                 if(!is_rdelta)
-                    gcode->stream->printf(";Home offset (mm):\nM206 X%1.2f Y%1.2f Z%1.2f\n", home_offset[0], home_offset[1], home_offset[2]);
+                    gcode->stream->printf(";Home offset (mm):\nM206 X%1.2f Y%1.2f Z%1.2 W%1.2f\n", home_offset[0], home_offset[1], home_offset[2], home_offset[3]);
                 else
-                    gcode->stream->printf(";Theta offset (degrees):\nM206 A%1.5f B%1.5f C%1.5f\n", home_offset[0], home_offset[1], home_offset[2]);
+                    gcode->stream->printf(";Theta offset (degrees):\nM206 A%1.5f B%1.5f C%1.5 D%1.5f\n", home_offset[0], home_offset[1], home_offset[2], home_offset[3]);
 
                 if (this->is_delta || this->is_scara) {
-                    gcode->stream->printf(";Trim (mm):\nM666 X%1.3f Y%1.3f Z%1.3f\n", trim_mm[0], trim_mm[1], trim_mm[2]);
+                    gcode->stream->printf(";Trim (mm):\nM666 X%1.3f Y%1.3f Z%1.3 W%1.3f\n", trim_mm[0], trim_mm[1], trim_mm[2], trim_mm[3]);
                     gcode->stream->printf(";Max Z\nM665 Z%1.3f\n", this->homing_position[2]);
                 }
                 if(saved_position[X_AXIS] != 0 || saved_position[Y_AXIS] != 0) {
@@ -829,9 +870,10 @@ void Endstops::on_gcode_received(void *argument)
                     if (gcode->has_letter('X')) trim_mm[0] = gcode->get_value('X');
                     if (gcode->has_letter('Y')) trim_mm[1] = gcode->get_value('Y');
                     if (gcode->has_letter('Z')) trim_mm[2] = gcode->get_value('Z');
+                    if (gcode->has_letter('W')) trim_mm[3] = gcode->get_value('W');  
 
                     // print the current trim values in mm
-                    gcode->stream->printf("X: %5.3f Y: %5.3f Z: %5.3f\n", trim_mm[0], trim_mm[1], trim_mm[2]);
+                    gcode->stream->printf("X: %5.3f Y: %5.3f Z: %5.3 W: %5.3f\n", trim_mm[0], trim_mm[1], trim_mm[2], trim_mm[3]);
 
                 }
                 break;
@@ -876,6 +918,7 @@ void Endstops::on_set_public_data(void* argument)
         this->trim_mm[0] = t[0];
         this->trim_mm[1] = t[1];
         this->trim_mm[2] = t[2];
+        this->trim_mm[3] = t[3];  
         pdr->set_taken();
 
     } else if(pdr->second_element_is(home_offset_checksum)) {
@@ -883,5 +926,6 @@ void Endstops::on_set_public_data(void* argument)
         if(!isnan(t[0])) this->home_offset[0] = t[0];
         if(!isnan(t[1])) this->home_offset[1] = t[1];
         if(!isnan(t[2])) this->home_offset[2] = t[2];
+        if(!isnan(t[3])) this->home_offset[3] = t[3];
     }
 }
